@@ -34,21 +34,41 @@ $(document).ready(function(){
         type: 'GET',
         dataType: 'json',
         success: function(data){
-          console.log(data.name);
-          console.log(data.powerstats);
-          console.log(data.biography);
+
+          function strings(elemnt){
+            const dataString = JSON.stringify(elemnt, null, 4);
+            return dataString;
+          }
+          
+
+          if(idConsultado > 732){
+            alert('El código de superheroe no está en el indice. Por favor intentar de nuevo');
+            limpiar();
+          } else {
+            $('#info').append(`
+              <h2 class='my-3 mx-auto'>Superheroe encontrado</h2>
+              <div class='container'>
+                <div clas='row'>
+                  <div class="card col-12 col-lg-6">
+                  <img class='card-img' src='${data.image.url}' alt='${data.name}'>
+                  <h3 class='card-title p-3'>${data.name}</h3>
+                    <div class='card-body'>
+                      <p class='card-text'>${strings(data.powerstats)}</p>
+                      <p class='card-text'>${strings(data.biography)}</p>
+                      <p class='card-text'>${strings(data.appearance)}</p>
+                      <p class='card-text'>${strings(data.work)}</p>
+                      <p class='card-text'>${strings(data.connections)}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              `);
+          }
         },
         error: function(){
           alert('No se pudieron encontrar los datos');
         },
       })
-
-      if(idConsultado > 732){
-        alert('El código de superheroe no está en el indice. Por favor intentar de nuevo');
-        limpiar();
-      } else {
-        $('#info').append(`<p>${idConsultado}</p>`);
-      }
     }
   });
 })
