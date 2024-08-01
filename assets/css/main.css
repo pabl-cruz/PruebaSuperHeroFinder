@@ -2,3 +2,8 @@ footer{
   position: fixed;
   bottom: 0;
 }
+
+#powers{
+  width: 50%;
+  height: 100%;
+}

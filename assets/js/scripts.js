@@ -1,6 +1,5 @@
 $(document).ready(function(){
-
-
+                          
   function limpiar(){
     $('#info').empty();
   }
@@ -19,9 +18,10 @@ $(document).ready(function(){
       }
     }
 
+
   $('#superheroConsulta').on('click', function(event){
     event.preventDefault();
-    limpiar();
+    //limpiar();
 
     let idConsultado = $('#idSuperheroe').val();
     let filtro = validar(idConsultado);
@@ -35,34 +35,60 @@ $(document).ready(function(){
         dataType: 'json',
         success: function(data){
 
-          function strings(elemnt){
-            const dataString = JSON.stringify(elemnt, null, 4);
-            return dataString;
-          }
-          
+          const biografia = Object.entries(data.biography);
+          const apariencia = Object.entries(data.appearance);
+          const trabajo = Object.entries(data.work);
+          const relaciones = Object.entries(data.connections);
+
+
+          const power = data.powerstats;
+      var chart = new CanvasJS.Chart("powers", {
+        exportEnabled: true,
+        animationEnabled: true,
+        title:{
+          text: "Estadisticas de poder para "+data.name
+        },
+        legend:{
+          cursor: "pointer",
+        },
+        data: [{
+          type: "pie",
+          showInLegend: true,
+          toolTipContent: "{name}: <strong>{y}%</strong>",
+          indexLabel: "{name} - {y}%",
+          dataPoints: [
+            { y: parseInt(power['intelligence']), name: "Inteligencia" },
+            { y: parseInt(power['strength']), name: "Fuerza" },
+            { y: parseInt(power['speed']), name: "Velocidad" },
+            { y: parseInt(power['durability']), name: "Resistencia" },
+            { y: parseInt(power['power']), name: "Energía" },
+            { y: parseInt(power['combate']), name: "Combate" },
+          ]
+        }]
+      });
+      chart.render();
 
           if(idConsultado > 732){
             alert('El código de superheroe no está en el indice. Por favor intentar de nuevo');
             limpiar();
           } else {
-            $('#info').append(`
-              <h2 class='my-3 mx-auto'>Superheroe encontrado</h2>
-              <div class='container'>
-                <div clas='row'>
-                  <div class="card col-12 col-lg-6">
-                  <img class='card-img' src='${data.image.url}' alt='${data.name}'>
-                  <h3 class='card-title p-3'>${data.name}</h3>
-                    <div class='card-body'>
-                      <p class='card-text'>${strings(data.powerstats)}</p>
-                      <p class='card-text'>${strings(data.biography)}</p>
-                      <p class='card-text'>${strings(data.appearance)}</p>
-                      <p class='card-text'>${strings(data.work)}</p>
-                      <p class='card-text'>${strings(data.connections)}</p>
+
+            $('#info').prepend(`
+              <h2 class='my-3 mx-auto pl-1'>Superheroe encontrado</h2>`);
+
+            $('#contenido').append(`
+                 <div class="card col-12 col-lg-6">
+                    <img class='card-img' src='${data.image.url}' alt='${data.name}'>
+                    <h3 class='card-title p-3'>${data.name}</h3>
+                      <div class='card-body'>
+                        <p class='card-text'>${biografia}</p>
+                        <p class='card-text'>${apariencia}</p>
+                        <p class='card-text'>${trabajo}</p>
+                        <p class='card-text'>${relaciones}</p>
                     </div>
                   </div>
-                </div>
-              </div>
-              `);
+              `
+            )
           }
         },
         error: function(){
