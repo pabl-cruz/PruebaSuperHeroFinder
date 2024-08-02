@@ -3,10 +3,9 @@ footer{
   bottom: 0;
 }
 
-.title-list{
-  list-style: none;
-  padding-top: 2rem;
-  margin-left: 1rem;
+.card img{
+  object-fit: cover;
+  border-radius: 5px 0 0 5px;
 }
 
 .no-data{
@@ -15,6 +14,16 @@ footer{
 }
 
 #powers{
-  width: 50%;
+  width: 33.3333%;
   height: 100%;
+}
+
+@media screen and (max-width: 992px){
+  canvas{
+    width: 100%;
+    margin-bottom: 5rem;
+  }
+  #powers{
+    width: 100%;
+  }
 }

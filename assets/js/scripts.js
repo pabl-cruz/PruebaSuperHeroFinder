@@ -1,13 +1,11 @@
 $(document).ready(function () {
   //limpiar y refrescar información de tarjeta de superhero y titulo
-  function limpiar() {
-    $("#tarjeta").empty();
-    $("#info h2").empty();
-  }
+  $('#info').limpiar('#tarjeta', 'h2');
+
   //Evento de consulta y validación formulario
   $("#superheroConsulta").on("click", function (event) {
     event.preventDefault();
-    limpiar();
+    $('#info').limpiar('#tarjeta', 'h2');
 
     const filtroNum = /[1-9][0-9]*/;
     let idConsultado = $("#idSuperheroe").val();
@@ -48,83 +46,76 @@ $(document).ready(function () {
             );
           } else {
             //de lo contrario, renderiza grafico de torta canvasJS
-            var chart = new CanvasJS.Chart("powers", {
-              exportEnabled: true,
-              animationEnabled: true,
-              title: {
-                text: "Estadisticas de poder para " + data.name,
-              },
-              legend: {
-                cursor: "pointer",
-              },
-              data: [
-                {
-                  type: "pie",
-                  indexLabelPlacement: "inside",
-                  toolTipContent: "{indexLabel}: <strong>{y}%</strong>",
-                  indexLabel: "{indexLabel}",
-                  dataPoints: dataPoints,
-                },
-              ],
-            });
-            chart.render();
+            $("#powers").graficoCanvasJS(data, dataPoints);
           }
           //validación si id esta dentro de los indices de superhero api
           if (idConsultado > 732 || idConsultado <= 0) {
             alert(
               "El código de superheroe no está en el indice. Por favor intentar de nuevo"
             );
-            limpiar();
+            $('#info').limpiar('#tarjeta', 'h2');
           } else {
-            limpiar();
+            $('#info').limpiar('#tarjeta', 'h2');
             //manipulacion de DOM para generar carta de bootstrap dinamica con info de superheroe basada en datos de objeto data
             $("#info").prepend(`
               <h2 class='my-3 mx-auto pl-1'>Superheroe encontrado</h2>`);
 
             $("#tarjeta").append(`
                  <div class="card mb-5">
-                    <img class='card-img' src='${data.image.url}' alt='${data.name}'>
-                    <h3 class='card-title p-3'>${data.name}</h3>
-                      <div class='card-body'>
-                        <ul class="list-group list-group-flush">
-                          <li class="title-list"><h4>Datos Personales</h4></li>
-                          <li class="list-group-item"><strong>Nombre:</strong> <span>${data.biography["full-name"]}</span></li>
-                          <li class="list-group-item"><strong>Primera Aparición:</strong> <span>${data.biography["first-appearance"]}</span></li>
-                          <li class="list-group-item"><strong>Lugar de nacimiento:</strong> <span>${data.biography["place-of-birth"]}</span></li>
-                          <li class="list-group-item"><strong>Alineación:</strong> <span>${data.biography["alignment"]}</span></li>
-                          <li class="title-list"><h4>Apariencia</h4></li>
-                          <li class="list-group-item"><strong>Genero:</strong> <span>${data.appearance["gender"]}</span></li>
-                          <li class="list-group-item"><strong>Raza:</strong> <span>${data.appearance["race"]}</span></li>
-                          <li class="list-group-item"><strong>Altura:</strong> <span>${data.appearance["height"][1]}</span></li>
-                          <li class="list-group-item"><strong>Peso:</strong> <span>${data.appearance["weight"][1]}</span></li>
-                          <li class="list-group-item"><strong>Color de ojos:</strong> <span>${data.appearance["eye-color"]}</span></li>
-                          <li class="list-group-item"><strong>Color de cabello:</strong> <span>${data.appearance["hair-color"]}</span></li>
-                          <li class="title-list"><h4>Ocupaciones</h4></li>
-                          <li class="list-group-item"><strong>Trabajo(s):</strong> <span>${data.work["occupation"]}</span></li>
-                          <li class="list-group-item"><strong>Base:</strong> <span>${data.work["base"]}</span></li>
-                          <li class="title-list"><h4>Relaciones</h4></li>
-                          <li class="list-group-item"><strong>Afiliación(es):</strong> <span>${data.connections["group-affiliation"]}</span></li>
-                          <li class="list-group-item"><strong>Parientes:</strong> <span>${data.connections["relatives"]}</span></li>
-                        </ul>
+                  <div class='container'>
+                    <div class='row'>
+                      <img class='col-12 col-lg-4 p-0' src='${data.image.url}' alt='${data.name}'>
+                      <div class='col-12 col-lg-8'>
+                        <h3 class='card-title p-3'>${data.name}</h3>
+                        <div class='card-body container'>
+                          <div class='row'>
+                            <div class='col-12 col-lg-6'>
+                              <h4>Datos Personales</h4>
+                              <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Nombre:</strong> <span>${data.biography["full-name"]}</span></li>
+                                <li class="list-group-item"><strong>Primera Aparición:</strong> <span>${data.biography["first-appearance"]}</span></li>
+                                <li class="list-group-item"><strong>Lugar de nacimiento:</strong> <span>${data.biography["place-of-birth"]}</span></li>
+                                <li class="list-group-item"><strong>Alineación:</strong> <span>${data.biography["alignment"]}</span></li>
+                              </ul>
+                            </div>
+                            <div class='col-12 col-lg-6'>
+                              <h4>Apariencia</h4>
+                              <ul class="list-group list-group-flush"> 
+                                <li class="list-group-item"><strong>Genero:</strong> <span>${data.appearance["gender"]}</span></li>
+                                <li class="list-group-item"><strong>Raza:</strong> <span>${data.appearance["race"]}</span></li>
+                                <li class="list-group-item"><strong>Altura:</strong> <span>${data.appearance["height"][1]}</span></li>
+                                <li class="list-group-item"><strong>Peso:</strong> <span>${data.appearance["weight"][1]}</span></li>
+                                <li class="list-group-item"><strong>Color de ojos:</strong> <span>${data.appearance["eye-color"]}</span></li>
+                                <li class="list-group-item"><strong>Color de cabello:</strong> <span>${data.appearance["hair-color"]}</span></li>
+                              </ul>
+                            </div>
+                            <div class='col-12 py-2'>
+                              <h4>Ocupaciones</h4>
+                              <ul class="list-group list-group-flush">
+                                 <li class="list-group-item"><strong>Trabajo(s):</strong> <span>${data.work["occupation"]}</span></li>
+                                 <li class="list-group-item"><strong>Base:</strong> <span>${data.work["base"]}</span></li>
+                              </ul>
+                            </div>
+                            <div class='col-12 py-2'>
+                              <h4>Relaciones</h4>
+                              <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><strong>Afiliación(es):</strong> <span>${data.connections["group-affiliation"]}</span></li>
+                                <li class="list-group-item"><strong>Parientes:</strong> <span>${data.connections["relatives"]}</span></li>
+                              </ul>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
                     </div>
                   </div>
+                </div>
               `);
-            //filtro si item de info de superheroe tiene guiones, o valor null, en ese caso remueve item 
+            //filtro si item de info de superheroe tiene guion, o valor null, en ese caso remueve item 
             const infoElemento = $('.list-group-item span')
-            infoElemento.each(function(){
-              if($(this).text().trim() === '-' || $(this).text() === "null"){
-                $(this).remove();
-              }
-            })
+            infoElemento.filtroInfoCardInvalido();
             //filtro si item de info de superheroe no tiene datos o está vacío, en ese caso remueve item
             const lista = $('.list-group-item')
-            const listaTitulo = $('.list-group-item h4')
-            lista.each(function(){
-              const haySpan = $(this).find('span');
-              if(haySpan.length === 0){
-                $(this).remove();
-              }
-            })
+            lista.filtroInfoCardVacio();
           }
         },
         error: function () {
