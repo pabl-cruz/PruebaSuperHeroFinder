@@ -1,16 +1,17 @@
 $(document).ready(function () {
+  //limpiar y refrescar información de tarjeta de superhero y titulo
   function limpiar() {
     $("#tarjeta").empty();
     $("#info h2").empty();
   }
-
+  //Evento de consulta y validación formulario
   $("#superheroConsulta").on("click", function (event) {
     event.preventDefault();
     limpiar();
 
     const filtroNum = /[1-9][0-9]*/;
     let idConsultado = $("#idSuperheroe").val();
-
+    //al pasar filtro de ids se conecta con superhero api
     if (
       filtroNum.test(idConsultado) &&
       idConsultado < 732 &&
@@ -37,15 +38,16 @@ $(document).ready(function () {
               continue;
             }
           }
-
+          //filtro si en el arreglo dataPoints hay valores NaN y devuelve cantidad
           const nanCount = dataPoints.filter((val) => isNaN(val.y)).length;
-
+          //Condicional en caso de que hayan más de 2 valores NaN en poderes, se oculta canvasJS y muestra aviso 
           if (nanCount >= 2) {
             $(".canvasjs-chart-container").hide();
             $("#powers").append(
               '<p class="no-data"><strong>No hay datos de poder para este superheroe.</strong></p>'
             );
           } else {
+            //de lo contrario, renderiza grafico de torta canvasJS
             var chart = new CanvasJS.Chart("powers", {
               exportEnabled: true,
               animationEnabled: true,
@@ -67,7 +69,7 @@ $(document).ready(function () {
             });
             chart.render();
           }
-
+          //validación si id esta dentro de los indices de superhero api
           if (idConsultado > 732 || idConsultado <= 0) {
             alert(
               "El código de superheroe no está en el indice. Por favor intentar de nuevo"
@@ -75,6 +77,7 @@ $(document).ready(function () {
             limpiar();
           } else {
             limpiar();
+            //manipulacion de DOM para generar carta de bootstrap dinamica con info de superheroe basada en datos de objeto data
             $("#info").prepend(`
               <h2 class='my-3 mx-auto pl-1'>Superheroe encontrado</h2>`);
 
@@ -106,13 +109,14 @@ $(document).ready(function () {
                     </div>
                   </div>
               `);
-              
+            //filtro si item de info de superheroe tiene guiones, o valor null, en ese caso remueve item 
             const infoElemento = $('.list-group-item span')
             infoElemento.each(function(){
-              if($(this).text().trim() === '-' || $(this).text() === "" || $(this).text() === "null"){
+              if($(this).text().trim() === '-' || $(this).text() === "null"){
                 $(this).remove();
               }
             })
+            //filtro si item de info de superheroe no tiene datos o está vacío, en ese caso remueve item
             const lista = $('.list-group-item')
             const listaTitulo = $('.list-group-item h4')
             lista.each(function(){
