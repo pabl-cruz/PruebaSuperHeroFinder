@@ -37,7 +37,7 @@ Repositorio de prueba final del módulo 4 para Bootcamp de Programación Front-E
 │       ├───jQuery.graficoCanvasJS.js
 │       ├───jQuery.limpiar.js
 │       └───scripts.js
-└───index.html
+├───index.html
 └───README.md
 
 ```
