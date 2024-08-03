@@ -1,11 +1,8 @@
 $(document).ready(function () {
-  //limpiar y refrescar información de tarjeta de superhero y titulo
-  $('#info').limpiar('#tarjeta', 'h2');
-
   //Evento de consulta y validación formulario
   $("#superheroConsulta").on("click", function (event) {
     event.preventDefault();
-    $('#info').limpiar('#tarjeta', 'h2');
+    $('#info').limpiar('#tarjeta', '#info h2');
 
     const filtroNum = /[1-9][0-9]*/;
     let idConsultado = $("#idSuperheroe").val();
@@ -54,9 +51,9 @@ $(document).ready(function () {
             alert(
               "El código de superheroe no está en el indice. Por favor intentar de nuevo"
             );
-            $('#info').limpiar('#tarjeta', 'h2');
+            $('#info').limpiar('#tarjeta', '#info h2');
           } else {
-            $('#info').limpiar('#tarjeta', 'h2');
+            $('#info').limpiar('#tarjeta', '#info h2');
             //manipulacion de DOM para generar carta de bootstrap dinamica con info de superheroe basada en datos de objeto data más sus filtros
             $('#info').generateCard(data, '#tarjeta');
             }
